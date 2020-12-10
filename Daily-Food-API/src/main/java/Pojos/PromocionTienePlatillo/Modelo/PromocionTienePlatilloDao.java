@@ -1,5 +1,6 @@
 package Pojos.PromocionTienePlatillo.Modelo;
 
+import Pojos.Platillo.Modelo.PlatilloDao;
 import Pojos.Promocion.Modelo.Promocion;
 import Pojos.Promocion.Modelo.PromocionDao;
 import Pojos.tools.ConnectionDB;
@@ -27,7 +28,7 @@ public class PromocionTienePlatilloDao {
                 PlatilloDao promocionPlatilloDao = new PlatilloDao();
                 PromocionDao promocionDao = new PromocionDao();
                 promocionPlatillo.setIdPromocion(promocionDao.getPromocionById(rs.getInt(1)));
-                promocionPlatillo.setIdPlatillo(promocionPlatilloDao.getIdPlatilloById(rs.getInt(2)));
+                promocionPlatillo.setIdPlatillo(promocionPlatilloDao.getPlatilloById(rs.getInt(2)));
                 list.add(promocionPlatillo);
             }
             if(con!=null) con.close();
@@ -57,7 +58,7 @@ public class PromocionTienePlatilloDao {
                 PlatilloDao promocionPlatilloDao = new PlatilloDao();
                 PromocionDao promocionDao = new PromocionDao();
                 promocionPlatillo.setIdPromocion(promocionDao.getPromocionById(rs.getInt(1)));
-                promocionPlatillo.setIdPlatillo(promocionPlatilloDao.getIdPlatilloById(rs.getInt(2)));
+                promocionPlatillo.setIdPlatillo(promocionPlatilloDao.getPlatilloById(rs.getInt(2)));
             }
             if(con!=null) con.close();
             if(rs!=null)rs.close();
@@ -80,7 +81,7 @@ public class PromocionTienePlatilloDao {
         try{
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
-            ps = con.prepareStatement("INSERT INTO promocionTienePlatilloMenu (`idPromocion`,`idPlatillo`) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps = con.prepareStatement("INSERT INTO promocionTienePlatilloMenu (`idPromocion`,`idPlatillo`) VALUES (?,?)");
             ps.setInt(1, promocionTienePlatillo.getIdPromocion().getIdPromocion());
             ps.setInt(2, promocionTienePlatillo.getIdPlatillo().getIdPlatillo());
 
@@ -89,15 +90,8 @@ public class PromocionTienePlatilloDao {
             if(flag){
                 con.commit();
 
-                try(ResultSet generateKeys = ps.getGeneratedKeys()){
-                    if(generateKeys.next()){
-                        int idRecovery = generateKeys.getInt(1);
-                        promocionTienePlatilloInsert = promocionTienePlatillo;
-                        promocionTienePlatilloInsert.setIdPlatillo(idRecovery);
-                    }else{
-                        throw new SQLException("FAIL PREPARACION NOT CREATED");
-                    }
-                }
+                promocionTienePlatilloInsert = promocionTienePlatillo;
+
             }
         }catch(Exception e){
             System.err.println("ERROR created" + e.getMessage());

@@ -1,6 +1,7 @@
 package Pojos.Precio.Modelo;
 
 import Pojos.ImagenPlatillo.Modelo.ImagenPlatillo;
+import Pojos.Platillo.Modelo.PlatilloDao;
 import Pojos.tools.ConnectionDB;
 
 import java.sql.*;
@@ -25,7 +26,7 @@ public class PrecioDao {
                 PlatilloDao precioDao = new PlatilloDao();
                 precio.setIdPrecio(rs.getInt(1));
                 precio.setPrecio(rs.getDouble(2));
-                precio.setIdPlatillo(precioDao.getIdPlatilloById(rs.getInt(2)));
+                precio.setIdPlatillo(precioDao.getPlatilloById(rs.getInt(2)));
                 list.add(precio);
             }
             if(con!=null) con.close();
@@ -55,7 +56,7 @@ public class PrecioDao {
                 PlatilloDao imagenPlatilloDao = new PlatilloDao();
                 precio.setIdPrecio(rs.getInt(1));
                 precio.setPrecio(rs.getDouble(2));
-                precio.setIdPlatillo(imagenPlatilloDao.getIdPlatilloById(rs.getInt(3)));
+                precio.setIdPlatillo(imagenPlatilloDao.getPlatilloById(rs.getInt(3)));
             }
             if(con!=null) con.close();
             if(rs!=null)rs.close();
